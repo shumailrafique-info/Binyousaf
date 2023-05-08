@@ -10,15 +10,15 @@ const registerUser = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
 
-    // const myCloud = await cloudinary.v2.uploader.upload(req.file.path);
+    const myCloud = await cloudinary.v2.uploader.upload(req.file.path);
 
     const user = await User.create({
       name,
       email,
       password,
       avatar: {
-        public_id: "1234567890",
-        url: `${process.env.IMAGE_URL}${req.file.filename}`,
+        public_id: myCloud.public_id,
+        url: myCloud.secure_url,
       },
     });
     sendToken(user, 200, res);
@@ -251,11 +251,13 @@ const updateProfile = async (req, res, next) => {
     };
 
     //Adding cloudinary
-
+    
     if (req.body.avatar !== "") {
+      await cloudinary.v2.uploader.destroy(req.user.avatar.public_id);
+      const myCloud = await cloudinary.v2.uploader.upload(req.file.path);
       newUserData.avatar = {
-        public_id: "1234567890",
-        url: `${process.env.IMAGE_URL}${req.file.filename}`,
+        public_id: myCloud.public_id,
+        url: myCloud.secure_url,
       };
     }
 

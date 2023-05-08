@@ -19,9 +19,7 @@ cloudinary.config({
 });
 
 const server = app.listen(process.env.PORT, () => {
-  console.log(
-    `Server is runing o port no http://localhost:${process.env.PORT}`
-  );
+  console.log(`Server is runing o port no: ${process.env.PORT}`);
 });
 
 //Unhandled Promise Rejection

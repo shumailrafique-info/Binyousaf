@@ -7,13 +7,14 @@ const cloudinary = require("cloudinary");
 const creatingProduct = async (req, res, next) => {
   try {
     let images = [];
-
     const imagesLink = [];
 
     for (let i = 0; i < req.files.length; i++) {
+      const myCloud = await cloudinary.v2.uploader.upload(req.files[i].path);
+
       imagesLink.push({
-        public_id: "1234567890",
-        url: `${process.env.IMAGE_URL}${req.files[i].filename}`,
+        public_id: myCloud.public_id,
+        url: myCloud.secure_url,
       });
     }
 
@@ -91,13 +92,16 @@ const updateProduct = async (req, res, next) => {
 
     const imagesLink = [];
 
-    for (let i = 0; i < req.files.length; i++) {
-      imagesLink.push({
-        public_id: "1234567890",
-        url: `${process.env.IMAGE_URL}${req.files[i].filename}`,
-      });
+    if (req.files.length !== 0) {
+      for (let i = 0; i < req.files.length; i++) {
+        const myCloud = await cloudinary.v2.uploader.upload(req.files[i].path);
+        imagesLink.push({
+          public_id: myCloud.public_id,
+          url: myCloud.secure_url,
+        });
+      }
+      req.body.images = imagesLink;
     }
-    req.body.images = imagesLink;
 
     product = await Product.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -157,7 +161,6 @@ const getSingleProduct = async (req, res, next) => {
 const createProductReview = async (req, res, next) => {
   try {
     const { rating, comment, productId } = req.body;
-
     const review = {
       user: req.user.id,
       name: req.user.name,
