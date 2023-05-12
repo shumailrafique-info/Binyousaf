@@ -14,7 +14,7 @@ const errorMidddleware = require("./middleware/error.js");
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-// app.use(express.static("./server/pictures"));
+app.use(express.static("./server/pictures"));
 
 //Routes importing
 const productRouter = require("./routes/productRoute.js");
@@ -32,9 +32,9 @@ app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "./build/index.html"));
 });
 
-// app.get("/", (req, res) => {
-//   res.send("Welcome to shumail Smasher");
-// });
+app.get("/", (req, res) => {
+  res.send("Welcome to shumail Smasher");
+});
 
 //Middlewares for Error
 app.use(errorMidddleware);

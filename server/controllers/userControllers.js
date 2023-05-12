@@ -251,7 +251,7 @@ const updateProfile = async (req, res, next) => {
     };
 
     //Adding cloudinary
-    
+
     if (req.body.avatar !== "") {
       await cloudinary.v2.uploader.destroy(req.user.avatar.public_id);
       const myCloud = await cloudinary.v2.uploader.upload(req.file.path);
