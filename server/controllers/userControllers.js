@@ -14,7 +14,7 @@ const registerUser = async (req, res, next) => {
 
     const user = await User.create({
       name,
-      email,
+      email: email.toLowerCase(),
       password,
       avatar: {
         public_id: myCloud.public_id,
@@ -24,7 +24,6 @@ const registerUser = async (req, res, next) => {
     sendToken(user, 200, res);
   } catch (error) {
     next(error);
-    // console.log("error");
   }
 };
 
@@ -38,7 +37,9 @@ const LoginUser = async (req, res, next) => {
       return next(new ErrorHandler("Please Enter Email $ Password", 400));
     }
 
-    const user = await User.findOne({ email }).select("+password");
+    const user = await User.findOne({ email: email.toLowerCase() }).select(
+      "+password"
+    );
 
     if (!user) {
       return next(new ErrorHandler("Invalid Email or Password", 401));
