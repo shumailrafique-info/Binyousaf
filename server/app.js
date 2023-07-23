@@ -26,6 +26,11 @@ app.use("/api/v1", userRouter);
 app.use("/api/v1", orderRouter);
 app.use("/api/v1", paymentRouter);
 
+// app.get("/admin/new", (req, res) => {
+//   // app.use(express.static(path.join(__dirname, "./dist")));
+//   // res.sendFile(path.resolve(__dirname, "./dist/index.html"));
+// });
+
 app.use(express.static(path.join(__dirname, "./build")));
 
 app.get("*", (req, res) => {
